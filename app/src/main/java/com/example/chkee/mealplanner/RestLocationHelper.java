@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by chkee on 11/14/2015.
@@ -18,6 +19,7 @@ public class RestLocationHelper extends SQLiteOpenHelper {
     private static final String COLUMN_CUISINE="cuisine";
     private static final String COLUMN_LOCATION="location";
 
+    String[][] m = new String[3][3];
     SQLiteDatabase db;
 
     private static final String TABLE_CREATE = "create table restlocations (id integer primary key not null , " +
@@ -31,7 +33,6 @@ public class RestLocationHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(TABLE_CREATE);
         this.db=db;
-        insertValues();
     }
 
     @Override
@@ -43,21 +44,16 @@ public class RestLocationHelper extends SQLiteOpenHelper {
 
     public void insertValues()
     {
+        m = new String[][]{{"MCDONALDS", "AMERICAN", "0.3"}, {"PANDA EXPRESS", "CHINESE", "0.4"}, {"SUBWAY", "AMERICAN", "0.3"}};
         db= this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_ID,1);
-        values.put(COLUMN_RESTAURANT_NAME,"CHIPOTLE");
-        values.put(COLUMN_LOCATION,"40.001321,-83.007512");
-        values.put(COLUMN_CUISINE,"MEXICAN");
-        db.insert(TABLE_NAME, null, values);
-     //   db= this.getWritableDatabase();
-       // ContentValues values1= new ContentValues();
-        //values1.put(COLUMN_ID,1);
-        //values1.put(COLUMN_RESTAURANT_NAME,"PANDA EXPRESS");
-        //values1.put(COLUMN_LOCATION,"40.004211,-83.008522");
-        //values1.put(COLUMN_CUISINE,"CHINESE");
-        //db.insert(TABLE_NAME, null, values1);
-
-
+        for(int i=0;i <3;i++) {
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_ID, i);
+            values.put(COLUMN_RESTAURANT_NAME, m[i][0]);
+            Log.d("REST_NAME","Printing"+m[i][0]);
+            values.put(COLUMN_LOCATION,m[i][2]);
+            values.put(COLUMN_CUISINE, m[i][1]);
+            db.insert(TABLE_NAME, null, values);
+        }
     }
 }

@@ -17,11 +17,13 @@ public class RestMenuHelper extends SQLiteOpenHelper {
     private static final String COLUMN_DISH_NAME="dishname";
     private static final String COLUMN_TYPE="type";
     private static final String COLUMN_CALORIES="calories";
+    private static final String COLUMN_PRICE= "price";
 
     SQLiteDatabase db;
+    String[][] m = new String[8][5];
 
     private static final String TABLE_CREATE = "create table restmenu (id integer primary key not null , " +
-            "name text not null , dishname text not null , type text not null , calories text not null);";
+            "name text not null , dishname text not null , type text not null , calories text not null , price text not null);";
 
     public RestMenuHelper(Context context)
     {
@@ -43,14 +45,21 @@ public class RestMenuHelper extends SQLiteOpenHelper {
 
     public void insertValues()
     {
-        db= this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_ID,1);
-        values.put(COLUMN_RESTAURANT_NAME,"CHIPOTLE");
-        values.put(COLUMN_CALORIES,"220");
-        values.put(COLUMN_DISH_NAME,"CARNITAS");
-        values.put(COLUMN_TYPE,"LUNCH");
-        db.insert(TABLE_NAME, null, values);
+        m = new String[][]{{"SUBWAY","SWEET ONION CHICKEN TERIYAKI","MAIN COURSE","370","7.5"}, {"SUBWAY","FUZE GREEN TEA","APPETIZERS","140","2"},
+                {"SUBWAY","OATMEAL RAISIN", "EXTRAS","200","1.5"},{"PANDA EXPRESS","ASIAN GRILLED CHICKEN","MAIN COURSE","300","6.8"},{"PANDA EXPRESS","CHICKEN EGG ROLL","APPETIZERS","200","4"},
+                {"PANDA EXPRESS","SWEETFIRE CHICKEN BREAST","MAIN COURSE ","380","4"},{"MCDONALDS","BACON CLUB HOUSE BURGER","MAIN COURSE","720","4.53"},
+                {"MCDONALDS","BIGMAC MEAL","MAIN COURSE","530","6.05"}  };
+        for(int i=0;i<8;i++) {
+            db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(COLUMN_ID, i);
+            values.put(COLUMN_RESTAURANT_NAME,m[i][0]);
+            values.put(COLUMN_CALORIES, m[i][3]);
+            values.put(COLUMN_DISH_NAME, m[i][1]);
+            values.put(COLUMN_TYPE, m[i][2]);
+            values.put(COLUMN_PRICE,m[i][4]);
+            db.insert(TABLE_NAME, null, values);
+        }
         //   db= this.getWritableDatabase();
         // ContentValues values1= new ContentValues();
         //values1.put(COLUMN_ID,1);

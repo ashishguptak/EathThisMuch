@@ -17,6 +17,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        restLocationHelper.insertValues();
+        restMenuHelper.insertValues();
        // Uri gmmIntentUri = Uri.parse("geo:0,0?q=restaurants");
         //Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         //mapIntent.setPackage("com.google.android.apps.maps");
