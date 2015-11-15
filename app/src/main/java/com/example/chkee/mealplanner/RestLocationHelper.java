@@ -7,11 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by chkee on 11/14/2015.
  */
 public class RestLocationHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION =5;
+    private static final int DATABASE_VERSION =9;
     private static final String DATABASE_NAME ="restlocations.db";
     private static final String TABLE_NAME1 ="restlocations";
     private static final String COLUMN_ID1="id";
@@ -37,6 +41,36 @@ public class RestLocationHelper extends SQLiteOpenHelper {
     private static final String TABLE_CREATE2= "create table restmenu (id integer primary key not null , " +
             "name text not null , dishname text not null , type text not null , calories text not null , price text not null);";
 
+    private String mealsRestQuery = "select * from restmenu rm , restlocations rl where rm.name = rl.name " +
+            "and rl.location <= ? and rl.cuisine = ?";
+
+    public List<RestMenu> getValues(int dist,String cuisine) {
+        db = this.getWritableDatabase();
+        int i=0;
+        Cursor cursor = db.rawQuery(mealsRestQuery, new String[]{String.valueOf(dist), cuisine});
+        List<RestMenu> result = new ArrayList<RestMenu>();
+        if (cursor.moveToFirst()) {
+            do {
+               // Log.d("columns","columns"+cursor.getColumnCount());
+               // Log.d ("Row","row"+i);
+                //i++;
+               RestMenu c = new RestMenu();
+                c.setId(cursor.getString(0));
+                c.setRestaurantName(cursor.getString(1));
+                c.setDishName(cursor.getString(2));
+                c.setType(cursor.getString(3));
+                c.setCalories(cursor.getString(4));
+                c.setPrice(cursor.getString(5));
+                c.setCuisine(cursor.getString(8));
+                c.setLocation(cursor.getString(9));
+                result.add(c);
+            } while (cursor.moveToNext());
+        }
+        Log.d("value","value" +(Arrays.toString(result.toArray())));
+        return result;
+    }
+
+
     public RestLocationHelper(Context context)
     {
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
@@ -61,11 +95,13 @@ public class RestLocationHelper extends SQLiteOpenHelper {
     {
         db = this.getWritableDatabase();
         m = new String[][]{{"MCDONALDS", "AMERICAN", "0.3"}, {"PANDA EXPRESS", "CHINESE", "0.4"}, {"SUBWAY", "AMERICAN", "0.3"}};
+        Cursor cursor = null;
         for(int i=0;i <3;i++) {
             ContentValues values = new ContentValues();
             String query = "select * from restlocations";
-            Cursor cursor=db.rawQuery(query,null);
+            cursor=db.rawQuery(query,null);
             int count=cursor.getCount();
+            Log.d("table1","table1"+count);
             values.put(COLUMN_ID1, count);
             values.put(COLUMN_RESTAURANT_NAME1, m[i][0]);
             Log.d("REST_NAME","Printing"+m[i][0]);
@@ -75,6 +111,7 @@ public class RestLocationHelper extends SQLiteOpenHelper {
         }
 
         db = this.getWritableDatabase();
+        Cursor cursor1 = null;
         n = new String[][]{{"SUBWAY","SWEET ONION CHICKEN TERIYAKI","MAIN COURSE","370","7.5"}, {"SUBWAY","FUZE GREEN TEA","APPETIZERS","140","2"},
                 {"SUBWAY","OATMEAL RAISIN", "EXTRAS","200","1.5"},{"PANDA EXPRESS","ASIAN GRILLED CHICKEN","MAIN COURSE","300","6.8"},{"PANDA EXPRESS","CHICKEN EGG ROLL","APPETIZERS","200","4"},
                 {"PANDA EXPRESS","SWEETFIRE CHICKEN BREAST","MAIN COURSE ","380","4"},{"MCDONALDS","BACON CLUB HOUSE BURGER","MAIN COURSE","720","4.53"},
@@ -82,8 +119,9 @@ public class RestLocationHelper extends SQLiteOpenHelper {
         for(int i=0;i<8;i++) {
             ContentValues values = new ContentValues();
             String query = "select * from restmenu";
-            Cursor cursor=db.rawQuery(query,null);
-            int count=cursor.getCount();
+            cursor1=db.rawQuery(query,null);
+            int count=cursor1.getCount();
+            Log.d("table2","table2"+count);
             values.put(COLUMN_ID2, count);
             values.put(COLUMN_RESTAURANT_NAME2,n[i][0]);
             values.put(COLUMN_CALORIES2, n[i][3]);
