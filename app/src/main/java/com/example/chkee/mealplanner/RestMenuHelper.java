@@ -45,19 +45,19 @@ public class RestMenuHelper extends SQLiteOpenHelper {
 
     public void insertValues()
     {
+        db = this.getWritableDatabase();
         m = new String[][]{{"SUBWAY","SWEET ONION CHICKEN TERIYAKI","MAIN COURSE","370","7.5"}, {"SUBWAY","FUZE GREEN TEA","APPETIZERS","140","2"},
                 {"SUBWAY","OATMEAL RAISIN", "EXTRAS","200","1.5"},{"PANDA EXPRESS","ASIAN GRILLED CHICKEN","MAIN COURSE","300","6.8"},{"PANDA EXPRESS","CHICKEN EGG ROLL","APPETIZERS","200","4"},
                 {"PANDA EXPRESS","SWEETFIRE CHICKEN BREAST","MAIN COURSE ","380","4"},{"MCDONALDS","BACON CLUB HOUSE BURGER","MAIN COURSE","720","4.53"},
                 {"MCDONALDS","BIGMAC MEAL","MAIN COURSE","530","6.05"}  };
         for(int i=0;i<8;i++) {
-            db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(COLUMN_ID, i);
             values.put(COLUMN_RESTAURANT_NAME,m[i][0]);
             values.put(COLUMN_CALORIES, m[i][3]);
             values.put(COLUMN_DISH_NAME, m[i][1]);
             values.put(COLUMN_TYPE, m[i][2]);
-            values.put(COLUMN_PRICE,m[i][4]);
+            values.put(COLUMN_PRICE, m[i][4]);
             db.insert(TABLE_NAME, null, values);
         }
         //   db= this.getWritableDatabase();

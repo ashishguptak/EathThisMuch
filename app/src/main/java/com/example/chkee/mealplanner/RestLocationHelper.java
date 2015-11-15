@@ -44,8 +44,8 @@ public class RestLocationHelper extends SQLiteOpenHelper {
 
     public void insertValues()
     {
+        db = this.getWritableDatabase();
         m = new String[][]{{"MCDONALDS", "AMERICAN", "0.3"}, {"PANDA EXPRESS", "CHINESE", "0.4"}, {"SUBWAY", "AMERICAN", "0.3"}};
-        db= this.getWritableDatabase();
         for(int i=0;i <3;i++) {
             ContentValues values = new ContentValues();
             values.put(COLUMN_ID, i);
